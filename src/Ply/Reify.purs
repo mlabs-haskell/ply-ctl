@@ -8,7 +8,6 @@ module Ply.Reify
 
 import Prelude
 
-import Data.Show.Generic (genericShow)
 import Data.Either (Either(..))
 import Data.Array ((:))
 import Ply.Typename (class PlyTypeName, plyTypeName)

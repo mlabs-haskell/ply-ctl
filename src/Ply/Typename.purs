@@ -8,6 +8,7 @@ import Ply.Types (AsData, SProxy)
 import Prelude ((<>), show)
 import Type.Proxy (Proxy(Proxy))
 
+import Contract.Credential (Credential)
 import Contract.Address (Address, PubKeyHash)
 import Contract.Time (POSIXTime)
 import Contract.Transaction (TransactionHash, TransactionInput, TransactionOutput)
@@ -62,6 +63,9 @@ instance PlyTypeName CurrencySymbol where
 
 instance PlyTypeName TokenName where
   plyTypeName _ = "PlutusLedgerApi.V1.Value:TokenName"
+
+instance PlyTypeName Credential where
+  plyTypeName _ = "PlutusLedgerApi.V1.Credential:Credential"
 
 instance PlyTypeName PubKeyHash where
   plyTypeName _ = "PlutusLedgerApi.V1.Crypto:PubKeyHash"
