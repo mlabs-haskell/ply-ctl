@@ -1,4 +1,4 @@
-module Ply.Apply (applyParam, (#), applyParamJoin, (#!)) where
+module Ply.Apply (applyParam, (##), applyParamJoin, (#!)) where
 
 import Prelude
 import Data.Either (Either(..))
@@ -21,7 +21,7 @@ applyParam (TypedScriptConstr script) p =
     Right applied -> Right $ TypedScriptConstr applied
     Left err -> Left $ ApplicationError err
 
-infixl 8 applyParam as #
+infixl 8 applyParam as ##
 
 applyParamJoin
   :: forall (role :: ScriptRole) (param :: Type) (paramRest :: TyList Type)
