@@ -5,10 +5,9 @@ module Ply.Types
   , ScriptRole(..)
   , ValidatorRole
   , MintingPolicyRole
-  , ScriptVersion
+  , ScriptVersion(..)
   , fromLanguage
   , toLanguage
-  , PlyError(..)
   , PlyError(..)
   , AsData(..)
   , SProxy(..)
@@ -26,7 +25,7 @@ import Aeson
   , caseAesonString
   )
 
-import Contract.Scripts (ApplyArgsError)
+import Contract.Scripts (ApplyArgsError, PlutusScript)
 import Ctl.Internal.Types.Scripts (Language(..))
 import Contract.Address (ByteArray)
 import Data.Tuple.Nested ((/\))
@@ -34,17 +33,15 @@ import Data.Either (Either(..))
 import Data.Newtype (class Newtype, wrap)
 import Data.Show.Generic (genericShow)
 import Data.Generic.Rep (class Generic)
-import Contract.Scripts (PlutusScript)
 import Ply.TypeList (TyList)
 
 data AsData a = AsData a
 
 data SProxy (s :: Symbol) = SProxy
 
--- | Equivalent to `TypedScript` in `ply-core` except
--- | this Purescript version handles error as well
+-- | Equivalent to `TypedScript` in `ply-core`
 data TypedScript :: ScriptRole -> TyList Type -> Type
-data TypedScript role params = TypedScriptConstr (Either PlyError PlutusScript)
+data TypedScript role params = TypedScriptConstr PlutusScript
 
 type role TypedScript nominal nominal
 
@@ -56,7 +53,7 @@ instance Show (TypedScript role params) where
 toPlutusScript
   :: forall role params
    . TypedScript role params
-  -> Either PlyError PlutusScript
+  -> PlutusScript
 toPlutusScript (TypedScriptConstr ts) = ts
 
 -- | Equivalent to `TypedScriptEnvelope` in `ply-core`

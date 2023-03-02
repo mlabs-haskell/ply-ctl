@@ -48,8 +48,8 @@ reifyTypedScript
    . ReifyRole role
   => ReifyParams params
   => TypedScriptEnvelope
-  -> TypedScript role params
-reifyTypedScript (TypedScriptEnvelope tse) = TypedScriptConstr $ do
+  -> Either PlyError (TypedScript role params)
+reifyTypedScript (TypedScriptEnvelope tse) = do
   let
     expRole = reifyRole (Proxy :: Proxy role)
     expParams = reifyParams (Proxy :: Proxy params)
@@ -60,4 +60,4 @@ reifyTypedScript (TypedScriptEnvelope tse) = TypedScriptConstr $ do
   when (expParams /= tse.params) $
     Left (ParamsMismatch { expected: expParams, actual: tse.params })
 
-  pure $ tse.script
+  pure $ TypedScriptConstr $ tse.script
