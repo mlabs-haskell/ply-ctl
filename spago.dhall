@@ -1,17 +1,13 @@
 { name = "ply-ctl"
 , dependencies =
-  [ "effect"
-  , "prelude"
+  [ "prelude"
   , "cardano-transaction-lib"
   , "bigints"
   , "aeson"
   , "either"
   , "newtype"
-  , "node-buffer"
-  , "node-fs"
   , "tuples"
   , "arrays"
-  , "uint"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs"]
