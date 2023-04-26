@@ -27,7 +27,7 @@ import Aeson
 
 import Contract.Scripts (ApplyArgsError, PlutusScript)
 import Ctl.Internal.Types.Scripts (Language(..))
-import Contract.Address (ByteArray)
+import Contract.Prim.ByteArray (ByteArray)
 import Data.Tuple.Nested ((/\))
 import Data.Either (Either(..))
 import Data.Newtype (class Newtype, wrap)
