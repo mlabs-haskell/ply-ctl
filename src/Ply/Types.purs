@@ -1,6 +1,8 @@
 module Ply.Types
   ( TypedScript(..)
   , toPlutusScript
+  , toValidator
+  , toMintingPolicy
   , TypedScriptEnvelope(..)
   , ScriptRole(..)
   , ValidatorRole
@@ -24,16 +26,15 @@ import Aeson
   , JsonDecodeError(..)
   , caseAesonString
   )
-
-import Contract.Scripts (ApplyArgsError, PlutusScript)
-import Ctl.Internal.Types.Scripts (Language(..))
 import Contract.Prim.ByteArray (ByteArray)
-import Data.Tuple.Nested ((/\))
+import Contract.Scripts (ApplyArgsError, MintingPolicy(..), PlutusScript, Validator(..))
+import Ctl.Internal.Types.Scripts (Language(..))
 import Data.Either (Either(..))
+import Data.Generic.Rep (class Generic)
 import Data.Newtype (class Newtype, wrap)
 import Data.Show.Generic (genericShow)
-import Data.Generic.Rep (class Generic)
-import Ply.TypeList (TyList)
+import Data.Tuple.Nested ((/\))
+import Ply.TypeList (TyList, Nil)
 
 data AsData a = AsData a
 
@@ -55,6 +56,14 @@ toPlutusScript
    . TypedScript role params
   -> PlutusScript
 toPlutusScript (TypedScriptConstr ts) = ts
+
+-- | Aquire fully applied Validator from TypedScript
+toValidator :: TypedScript ValidatorRole Nil -> Validator
+toValidator = toPlutusScript >>> Validator
+
+-- | Aquire fully applied MintingPolicy from TypedScript
+toMintingPolicy :: TypedScript MintingPolicyRole Nil -> MintingPolicy
+toMintingPolicy = toPlutusScript >>> PlutusMintingPolicy
 
 -- | Equivalent to `TypedScriptEnvelope` in `ply-core`
 newtype TypedScriptEnvelope =
