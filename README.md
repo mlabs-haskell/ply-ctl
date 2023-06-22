@@ -38,7 +38,7 @@ ply-ctl =
   , "integers"
   ]
 , repo = "https://github.com/mlabs-haskell/ply-ctl.git"
-, version = "v1.0.0"
+, version = "<latest rev>"
 }
 ```		
 
