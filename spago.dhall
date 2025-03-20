@@ -1,14 +1,23 @@
 { name = "ply-ctl"
 , dependencies =
-  [ "prelude"
-  , "cardano-transaction-lib"
-  , "bigints"
-  , "aeson"
-  , "either"
-  , "newtype"
-  , "tuples"
+  [ "aeson"
+  , "argonaut"
   , "arrays"
+  , "bifunctors"
+  , "bigints"
+  , "cardano-transaction-lib"
+  , "control"
+  , "either"
+  , "foldable-traversable"
+  , "foreign-object"
+  , "lists"
+  , "maybe"
+  , "newtype"
+  , "ordered-collections"
+  , "prelude"
+  , "strings"
+  , "tuples"
   ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs"]
+, sources = [ "src/**/*.purs" ]
 }
