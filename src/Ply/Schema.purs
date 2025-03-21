@@ -2,12 +2,15 @@ module Ply.Schema
   ( SchemaDescription(..)
   , TypedBlueprint
   , normalizeSchemaDescription
+  , readBlueprint
+  , readBlueprintSync
   ) where
 
 import Prelude
 
-import Aeson (class DecodeAeson, Aeson, JsonDecodeError(..), caseAesonArray, caseAesonObject, caseAesonString, decodeAeson)
+import Aeson (class DecodeAeson, Aeson, JsonDecodeError(..), caseAesonArray, caseAesonObject, caseAesonString, decodeAeson, parseJsonStringToAeson, printJsonDecodeError)
 import Control.Alternative ((<|>))
+import Control.Monad.Except (throwError)
 import Data.Argonaut as Argo
 import Data.Array (sortBy)
 import Data.Array.NonEmpty (NonEmptyArray)
@@ -24,15 +27,35 @@ import Data.String (Pattern(Pattern), stripPrefix)
 import Data.Traversable (traverse)
 import Data.TraversableWithIndex (forWithIndex, traverseWithIndex)
 import Data.Tuple (Tuple(Tuple), fst, snd)
+import Effect (Effect)
+import Effect.Aff (Aff, error)
 import Foreign.Object (Object, lookup)
+import Node.Encoding (Encoding(..))
+import Node.FS.Aff as FS.Aff
+import Node.FS.Sync as FS.Sync
 
 type TypedBlueprint =
   { validators ::
-      { title :: String
-      , parameters :: Array { schema :: SchemaDescription }
-      }
-  , definitions :: Map String SchemaDescription
+      Array
+        { title :: String
+        , parameters :: Array { schema :: SchemaDescription }
+        }
+  , definitions :: Object SchemaDescription
   }
+
+readBlueprint ∷ String → Aff TypedBlueprint
+readBlueprint fp = do
+  content <- FS.Aff.readTextFile UTF8 fp
+  case parseJsonStringToAeson content >>= decodeAeson of
+    Left err -> throwError $ error $ printJsonDecodeError err
+    Right x -> pure x
+
+readBlueprintSync ∷ String → Effect TypedBlueprint
+readBlueprintSync fp = do
+  content <- FS.Sync.readTextFile UTF8 fp
+  case parseJsonStringToAeson content >>= decodeAeson of
+    Left err -> throwError $ error $ printJsonDecodeError err
+    Right x -> pure x
 
 data SchemaDescription
   = SimpleType String
